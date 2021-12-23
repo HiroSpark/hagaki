@@ -78,6 +78,7 @@
 }
 \newcommand\recipient[1]{
   \keys_set:nn { hgk / recipient }{ #1 }
+  \__hgk_draw:
 }
 
 % -- 描画 --
@@ -107,7 +108,7 @@
 \dim_new:N \__hgk_bottom_line_dim
 \dim_set:Nn \__hgk_bottom_line_dim { 114mm }
 
-\newcommand\makebody{
+\cs_new:Nn \__hgk_draw: {
   \begin{tikzpicture}[
     % 座標系の変更
     xscale=-1,
@@ -141,7 +142,7 @@
       { \s } \l__hgk_recipient_name_tl \l_tmpa_tl \l_tmpb_tl
     \__hgk_put_txt:nnn { north }{ 41mm, 28mm }{ \hgk_put_recipient_name:\l_tmpa_tl }
     \__hgk_put_txt:nnn { north }{ 41mm, 66mm }{ \hgk_put_recipient_name:\l_tmpb_tl }
-    \__hgk_put_txt:nnn { south }{ 41mm, \__hgk_bottom_line_dim }{ \hgk_put_recipient_name:様 }
+    \__hgk_put_txt:nnn { south }{ 41mm, \__hgk_bottom_line_dim }{ \hgk_put_recipient_name: 様 }
 
     % 差出人 ------------------------------------––––––––––––––---–––––––--------
     % 住所
