@@ -41,6 +41,25 @@
   \ltjsetparameter{kanjiskip=.2\zw}
 }
 
+\cs_new:Nn \hgk_put_recipient_postal_code: {
+  \normalsize
+}
+\cs_new:Nn \hgk_put_recipient_address: {
+  \normalsize
+}
+\cs_new:Nn \hgk_put_recipient_name: {
+  \Large
+}
+\cs_new:Nn \hgk_put_sender_postal_code: {
+  \normalsize
+}
+\cs_new:Nn \hgk_put_sender_address: {
+  \normalsize
+}
+\cs_new:Nn \hgk_put_sender_name: {
+  \large
+}
+
 % -- インターフェイス --
 
 \keys_define:nn { hgk / sender }{
@@ -75,11 +94,12 @@
   \seq_pop_left:NN \l_tmpa_seq #4
 }
 
-% #1: 右端の文字の x 座標, #2: 右端の文字の y 座標, #3: 文字間隔
-\cs_new:Npn \__hgk_put_postal_code:nnnn #1 #2 #3 #4 {
+% #1: 右端の文字の x 座標, #2: 右端の文字の y 座標, #3: 文字間隔, #4: 文字列,
+% #5: 挿入する関数
+\cs_new:Npn \__hgk_put_postal_code:nnnnn #1 #2 #3 #4 #5 {
   \dim_set:Nn \l_tmpa_dim { #1 } % 現在の box の右端の x 座標
   \tl_map_inline:Nn #4 {
-    \node[] at (\l_tmpa_dim, #2) { ##1 };
+    \node[] at (\l_tmpa_dim, #2) { #5 ##1 };
     \dim_add:Nn \l_tmpa_dim { #3 }
   }
 }
@@ -108,28 +128,38 @@
     % 郵便番号
     \__hgk_regex_split_two:nNNN
       { - } \l__hgk_recipient_postal_code_tl \l_tmpb_tl \l_tmpa_tl
-    \__hgk_put_postal_code:nnnn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
-    \__hgk_put_postal_code:nnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
+    \__hgk_put_postal_code:nnnnn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
+      \hgk_put_recipient_postal_code:
+    \__hgk_put_postal_code:nnnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
+      \hgk_put_recipient_postal_code:
     % 住所
-    \__hgk_put_txt:nnn { north }{ 10mm, 24mm }{ \normalsize\l__hgk_recipient_address_tl }
+    \__hgk_put_txt:nnn { north }{ 10mm, 24mm }{
+      \hgk_put_recipient_address:\l__hgk_recipient_address_tl
+    }
     % 宛名
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_recipient_name_tl \l_tmpa_tl \l_tmpb_tl
-    \__hgk_put_txt:nnn { north }{ 41mm, 28mm }{ \Large\l_tmpa_tl }
-    \__hgk_put_txt:nnn { north }{ 41mm, 66mm }{ \Large\l_tmpb_tl }
-    \__hgk_put_txt:nnn { south }{ 41mm, \__hgk_bottom_line_dim }{ \Large 様}
+    \__hgk_put_txt:nnn { north }{ 41mm, 28mm }{ \hgk_put_recipient_name:\l_tmpa_tl }
+    \__hgk_put_txt:nnn { north }{ 41mm, 66mm }{ \hgk_put_recipient_name:\l_tmpb_tl }
+    \__hgk_put_txt:nnn { south }{ 41mm, \__hgk_bottom_line_dim }{ \hgk_put_recipient_name:様 }
 
     % 差出人 ------------------------------------––––––––––––––---–––––––--------
     % 住所
-    \__hgk_put_txt:nnn { south }{ 73mm, \__hgk_bottom_line_dim }{ \normalsize\l__hgk_sender_address_tl }
+    \__hgk_put_txt:nnn { south }{ 73mm, \__hgk_bottom_line_dim }{
+      \hgk_put_sender_address:\l__hgk_sender_address_tl
+    }
     % 名前
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_sender_name_tl \l_tmpa_tl \l_tmpb_tl
-    \__hgk_put_txt:nnn { south }{ 85mm, \__hgk_bottom_line_dim }{ \large\l_tmpa_tl\hspace{1\zw}\l_tmpb_tl }
+    \__hgk_put_txt:nnn { south }{ 85mm, \__hgk_bottom_line_dim }{
+      \hgk_put_sender_name: \l_tmpa_tl \hspace{1\zw} \l_tmpb_tl
+    }
     % 郵便番号
     \__hgk_regex_split_two:nNNN
       { - } \l__hgk_sender_postal_code_tl \l_tmpb_tl \l_tmpa_tl
-    \__hgk_put_postal_code:nnnn { 67.5mm }{ 126mm }{ 4mm } \l_tmpa_tl
-    \__hgk_put_postal_code:nnnn { 84.5mm }{ 126mm }{ 4mm } \l_tmpb_tl
+    \__hgk_put_postal_code:nnnnn { 67.5mm }{ 126mm }{ 4mm } \l_tmpa_tl
+      \hgk_put_sender_postal_code:
+    \__hgk_put_postal_code:nnnnn { 84.5mm }{ 126mm }{ 4mm } \l_tmpb_tl
+      \hgk_put_sender_postal_code:
   \end{tikzpicture}
 }
