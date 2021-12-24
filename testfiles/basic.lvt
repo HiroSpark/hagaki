@@ -6,17 +6,13 @@
   name        = 日本 太郎,
   address     = 東京都中央区日本橋1-3-11
 }
+
+\begin{document}
+
 \recipient{
   postal_code = 542-0071,
   name        = 戎 太郎,
   address     = 大阪府大阪市中央区道頓堀1丁目
 }
-
-\begin{document}
-
-\START
-\showoutput
-\makebody
-\END
 
 \end{document}
