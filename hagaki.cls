@@ -41,13 +41,13 @@
   \ltjsetparameter{kanjiskip=.2\zw}
 }
 
-\cs_new:Nn \hgk_put_recipient_postal_code: {
+\cs_new:Nn \hgk_put_rcpt_postal_code: {
   \normalsize
 }
-\cs_new:Nn \hgk_put_recipient_address: {
+\cs_new:Nn \hgk_put_rcpt_address: {
   \normalsize
 }
-\cs_new:Nn \hgk_put_recipient_name: {
+\cs_new:Nn \hgk_put_rcpt_name: {
   \Large
 }
 \cs_new:Nn \hgk_put_sender_postal_code: {
@@ -72,16 +72,36 @@
 }
 
 \keys_define:nn { hgk / recipient }{
-  postal_code .tl_set:N = \l__hgk_recipient_postal_code_tl,
-  name        .tl_set:N = \l__hgk_recipient_name_tl,
-  address     .tl_set:N = \l__hgk_recipient_address_tl
+  postal_code .tl_set:N = \l__hgk_rcpt_postal_code_tl,
+  name        .tl_set:N = \l__hgk_rcpt_name_tl,
+  address     .tl_set:N = \l__hgk_rcpt_address_tl
 }
 \newcommand\recipient[1]{
   \keys_set:nn { hgk / recipient }{ #1 }
   \__hgk_draw:
 }
 
+\keys_define:nn { hgk / style }{
+  top_line    .dim_set:N = \l__hgk_top_line_dim,
+  bottom_line .dim_set:N = \l__hgk_bottom_line_dim,
+  recipient / name_indent       .dim_set:N = \l__hgk_rcpt_name_indent_dim,
+  recipient / family_name_width .dim_set:N = \l__hgk_rcpt_family_name_width_dim
+}
+\keys_set:nn { hgk / style }{
+  top_line = 24mm,
+  bottom_line = 114mm,
+  recipient / name_indent = 4mm,
+  recipient / family_name_width = 38mm
+}
+
+\newcommand\hagakisetup[1]{
+  \keys_set:nn { hgk / style }{ #1 }
+}
+
 % -- 描画 --
+
+\dim_new:N  \l__hgk_sender_postal_code_pos_dim
+\dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 126mm }
 
 % #1: アンカーの位置, #2: 座標, #3: テキスト
 \cs_new:Npn \__hgk_put_txt:nnn #1 #2 #3 {
@@ -105,9 +125,6 @@
   }
 }
 
-\dim_new:N \__hgk_bottom_line_dim
-\dim_set:Nn \__hgk_bottom_line_dim { 114mm }
-
 \cs_new:Nn \__hgk_draw: {
   \begin{tikzpicture}[
     % 座標系の変更
@@ -128,39 +145,41 @@
     % 宛名 -------------––––––––––––––––––––––––––––––––––––––––––––––––––––––––-
     % 郵便番号
     \__hgk_regex_split_two:nNNN
-      { - } \l__hgk_recipient_postal_code_tl \l_tmpb_tl \l_tmpa_tl
+      { - } \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
     \__hgk_put_postal_code:nnnnn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
-      \hgk_put_recipient_postal_code:
+      \hgk_put_rcpt_postal_code:
     \__hgk_put_postal_code:nnnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
-      \hgk_put_recipient_postal_code:
+      \hgk_put_rcpt_postal_code:
     % 住所
     \__hgk_put_txt:nnn { north }{ 10mm, 24mm }{
-      \hgk_put_recipient_address:\l__hgk_recipient_address_tl
+      \hgk_put_rcpt_address:\l__hgk_rcpt_address_tl
     }
     % 宛名
     \__hgk_regex_split_two:nNNN
-      { \s } \l__hgk_recipient_name_tl \l_tmpa_tl \l_tmpb_tl
-    \__hgk_put_txt:nnn { north }{ 41mm, 28mm }{ \hgk_put_recipient_name:\l_tmpa_tl }
-    \__hgk_put_txt:nnn { north }{ 41mm, 66mm }{ \hgk_put_recipient_name:\l_tmpb_tl }
-    \__hgk_put_txt:nnn { south }{ 41mm, \__hgk_bottom_line_dim }{ \hgk_put_recipient_name: 様 }
+      { \s } \l__hgk_rcpt_name_tl \l_tmpa_tl \l_tmpb_tl
+    \dim_set:Nn \l_tmpa_dim { \l__hgk_top_line_dim + \l__hgk_rcpt_name_indent_dim }
+    \__hgk_put_txt:nnn { north }{ 41mm, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpa_tl }
+    \dim_add:Nn \l_tmpa_dim { \l__hgk_rcpt_family_name_width_dim }
+    \__hgk_put_txt:nnn { north }{ 41mm, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpb_tl }
+    \__hgk_put_txt:nnn { south }{ 41mm, \l__hgk_bottom_line_dim }{ \hgk_put_rcpt_name: 様 }
 
     % 差出人 ------------------------------------––––––––––––––---–––––––--------
     % 住所
-    \__hgk_put_txt:nnn { south }{ 73mm, \__hgk_bottom_line_dim }{
+    \__hgk_put_txt:nnn { south }{ 73mm, \l__hgk_bottom_line_dim }{
       \hgk_put_sender_address:\l__hgk_sender_address_tl
     }
     % 名前
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_sender_name_tl \l_tmpa_tl \l_tmpb_tl
-    \__hgk_put_txt:nnn { south }{ 85mm, \__hgk_bottom_line_dim }{
+    \__hgk_put_txt:nnn { south }{ 85mm, \l__hgk_bottom_line_dim }{
       \hgk_put_sender_name: \l_tmpa_tl \hspace{1\zw} \l_tmpb_tl
     }
     % 郵便番号
     \__hgk_regex_split_two:nNNN
       { - } \l__hgk_sender_postal_code_tl \l_tmpb_tl \l_tmpa_tl
-    \__hgk_put_postal_code:nnnnn { 67.5mm }{ 126mm }{ 4mm } \l_tmpa_tl
+    \__hgk_put_postal_code:nnnnn { 67.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpa_tl
       \hgk_put_sender_postal_code:
-    \__hgk_put_postal_code:nnnnn { 84.5mm }{ 126mm }{ 4mm } \l_tmpb_tl
+    \__hgk_put_postal_code:nnnnn { 84.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpb_tl
       \hgk_put_sender_postal_code:
   \end{tikzpicture}
 }
