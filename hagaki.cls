@@ -3,6 +3,15 @@
 \RequirePackage{tikz}
 % \RequirePackage{lua-visual-debug}
 
+% -- エラーの出力
+
+\sys_if_engine_luatex:F {
+  \ClassError{ hagaki }{
+    You~are~processing~this~document~with~\c_sys_engine_format_str.~
+    This~package~runs~only~on~lualatex.
+  }{}
+}
+
 % -- 基本的なレイアウト
 
 \LoadClass{ltjsarticle}
