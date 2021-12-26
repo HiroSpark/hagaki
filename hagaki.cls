@@ -3,7 +3,7 @@
 \RequirePackage{tikz}
 % \RequirePackage{lua-visual-debug}
 
-% -- 基本的なレイアウト --
+% -- 基本的なレイアウト
 
 \LoadClass{ltjsarticle}
 % フォント
@@ -27,40 +27,8 @@
 % 行設定
 \skip_set:Nn \parindent { 0pt }
 \skip_set:Nn \parskip { 0pt }
-% フォントサイズ
-\renewcommand\Large{
-  \fontsize{10mm}{10mm}\selectfont
-  \ltjsetparameter{kanjiskip=.33\zw}
-}
-\renewcommand\large{
-  \fontsize{6mm}{6mm}\selectfont
-  \ltjsetparameter{kanjiskip=.33\zw}
-}
-\renewcommand\normalsize{
-  \fontsize{3.5mm}{3.5mm}\selectfont
-  \ltjsetparameter{kanjiskip=.2\zw}
-}
 
-\cs_new:Nn \hgk_put_rcpt_postal_code: {
-  \normalsize
-}
-\cs_new:Nn \hgk_put_rcpt_address: {
-  \normalsize
-}
-\cs_new:Nn \hgk_put_rcpt_name: {
-  \Large
-}
-\cs_new:Nn \hgk_put_sender_postal_code: {
-  \normalsize
-}
-\cs_new:Nn \hgk_put_sender_address: {
-  \normalsize
-}
-\cs_new:Nn \hgk_put_sender_name: {
-  \large
-}
-
-% -- インターフェイス --
+% -- インターフェイス
 
 \keys_define:nn { hgk / sender }{
   postal_code .tl_set:N = \l__hgk_sender_postal_code_tl,
@@ -106,7 +74,7 @@
   \keys_set:nn { hgk / style }{ #1 }
 }
 
-% -- 描画 --
+% -- 描画
 
 \dim_new:N  \l__hgk_sender_postal_code_pos_dim
 \dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 126mm }
@@ -143,14 +111,14 @@
   ]
     \useasboundingbox (0,0) rectangle (\paperwidth, \paperheight);
 
-    % 作業用の配置 ---------–––––––––––––––––––––––––––––––––––––––––––––––––––––-
+    % -- 作業用の配置
     % \node[] (image) at (.5\paperwidth, .5\paperheight) {
     %   \includegraphics[width=\paperwidth]{resources/new-years-card.jpg}
     % };
     % \draw[step=10mm, line~width=0.2mm,  blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
     % \draw[step=1mm,  line~width=0.01mm, blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
 
-    % 宛名 -------------––––––––––––––––––––––––––––––––––––––––––––––––––––––––-
+    % -- 宛名
     % 郵便番号
     \__hgk_regex_split_two:nNNN
       { - } \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
@@ -171,7 +139,7 @@
     \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpb_tl }
     \__hgk_put_txt:nnn { south }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_bottom_line_dim }{ \hgk_put_rcpt_name: 様 }
 
-    % 差出人 ------------------------------------––––––––––––––---–––––––--------
+    % -- 差出人
     % 住所
     \__hgk_put_txt:nnn { south }{ \l__hgk_sender_address_pos_dim, \l__hgk_bottom_line_dim }{
       \hgk_put_sender_address:\l__hgk_sender_address_tl
@@ -191,3 +159,25 @@
       \hgk_put_sender_postal_code:
   \end{tikzpicture}
 }
+
+% -- デフォルトのスタイル
+
+\cs_new:Nn \__hgk_huge_txt_style: {
+  \fontsize{10mm}{10mm}\selectfont
+  \ltjsetparameter{kanjiskip=.33\zw}
+}
+\cs_new:Nn \__hgk_large_txt_style: {
+  \fontsize{6mm}{6mm}\selectfont
+  \ltjsetparameter{kanjiskip=.33\zw}
+}
+\cs_new:Nn \__hgk_normal_txt_style: {
+  \fontsize{3.5mm}{3.5mm}\selectfont
+  \ltjsetparameter{kanjiskip=.2\zw}
+}
+
+\cs_set_eq:NN \hgk_put_rcpt_postal_code:    \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_put_rcpt_address:        \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_put_rcpt_name:           \__hgk_huge_txt_style:
+\cs_set_eq:NN \hgk_put_sender_postal_code:  \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_put_sender_address:      \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_put_sender_name:         \__hgk_large_txt_style:
