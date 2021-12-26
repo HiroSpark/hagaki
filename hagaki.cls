@@ -61,7 +61,6 @@
 }
 \keys_set:nn { hgk / style }{
   top_line    = 24mm,
-  bottom_line = 114mm,
   recipient / address_position  = 10mm,
   recipient / name_position     = 41mm,
   recipient / name_indent       = 4mm,
@@ -74,10 +73,20 @@
   \keys_set:nn { hgk / style }{ #1 }
 }
 
-% -- 描画
+% -- クラスオプション
 
-\dim_new:N  \l__hgk_sender_postal_code_pos_dim
-\dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 126mm }
+\dim_new:N \l__hgk_sender_postal_code_pos_dim
+
+\dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 140.5mm }
+\dim_set:Nn \l__hgk_bottom_line_dim { 130mm }
+
+\DeclareOption{ nenga }{
+  \dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 126mm }
+  \dim_set:Nn \l__hgk_bottom_line_dim { 114mm }
+}
+\ProcessOptions
+
+% -- 描画
 
 % #1: アンカーの位置, #2: 座標, #3: テキスト
 \cs_new:Npn \__hgk_put_txt:nnn #1 #2 #3 {
