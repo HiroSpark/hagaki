@@ -84,14 +84,22 @@
 \keys_define:nn { hgk / style }{
   top_line    .dim_set:N = \l__hgk_top_line_dim,
   bottom_line .dim_set:N = \l__hgk_bottom_line_dim,
+  recipient / address_position  .dim_set:N = \l__hgk_rcpt_address_pos_dim,
+  recipient / name_position     .dim_set:N = \l__hgk_rcpt_name_pos_dim,
   recipient / name_indent       .dim_set:N = \l__hgk_rcpt_name_indent_dim,
-  recipient / family_name_width .dim_set:N = \l__hgk_rcpt_family_name_width_dim
+  recipient / family_name_width .dim_set:N = \l__hgk_rcpt_family_name_width_dim,
+  sender / address_position     .dim_set:N = \l__hgk_sender_address_pos_dim,
+  sender / name_position        .dim_set:N = \l__hgk_sender_name_pos_dim
 }
 \keys_set:nn { hgk / style }{
-  top_line = 24mm,
+  top_line    = 24mm,
   bottom_line = 114mm,
-  recipient / name_indent = 4mm,
-  recipient / family_name_width = 38mm
+  recipient / address_position  = 10mm,
+  recipient / name_position     = 41mm,
+  recipient / name_indent       = 4mm,
+  recipient / family_name_width = 38mm,
+  sender / address_position     = 73mm,
+  sender / name_position        = 85mm
 }
 
 \newcommand\hagakisetup[1]{
@@ -151,27 +159,27 @@
     \__hgk_put_postal_code:nnnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
       \hgk_put_rcpt_postal_code:
     % 住所
-    \__hgk_put_txt:nnn { north }{ 10mm, 24mm }{
+    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_address_pos_dim, 24mm }{
       \hgk_put_rcpt_address:\l__hgk_rcpt_address_tl
     }
     % 宛名
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_rcpt_name_tl \l_tmpa_tl \l_tmpb_tl
     \dim_set:Nn \l_tmpa_dim { \l__hgk_top_line_dim + \l__hgk_rcpt_name_indent_dim }
-    \__hgk_put_txt:nnn { north }{ 41mm, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpa_tl }
+    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpa_tl }
     \dim_add:Nn \l_tmpa_dim { \l__hgk_rcpt_family_name_width_dim }
-    \__hgk_put_txt:nnn { north }{ 41mm, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpb_tl }
-    \__hgk_put_txt:nnn { south }{ 41mm, \l__hgk_bottom_line_dim }{ \hgk_put_rcpt_name: 様 }
+    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpb_tl }
+    \__hgk_put_txt:nnn { south }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_bottom_line_dim }{ \hgk_put_rcpt_name: 様 }
 
     % 差出人 ------------------------------------––––––––––––––---–––––––--------
     % 住所
-    \__hgk_put_txt:nnn { south }{ 73mm, \l__hgk_bottom_line_dim }{
+    \__hgk_put_txt:nnn { south }{ \l__hgk_sender_address_pos_dim, \l__hgk_bottom_line_dim }{
       \hgk_put_sender_address:\l__hgk_sender_address_tl
     }
     % 名前
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_sender_name_tl \l_tmpa_tl \l_tmpb_tl
-    \__hgk_put_txt:nnn { south }{ 85mm, \l__hgk_bottom_line_dim }{
+    \__hgk_put_txt:nnn { south }{ \l__hgk_sender_name_pos_dim, \l__hgk_bottom_line_dim }{
       \hgk_put_sender_name: \l_tmpa_tl \hspace{1\zw} \l_tmpb_tl
     }
     % 郵便番号
