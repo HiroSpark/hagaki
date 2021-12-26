@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.1.0}{}
 \RequirePackage{tikz}
-% \RequirePackage{lua-visual-debug}
+\RequirePackage{lua-visual-debug}
 
 % -- エラーの出力
 
@@ -129,7 +129,7 @@
   ]
     \useasboundingbox (0,0) rectangle (\paperwidth, \paperheight);
 
-    % -- 作業用の配置
+    % -- 作業用
     % \node[] (image) at (.5\paperwidth, .5\paperheight) {
     %   \includegraphics[width=\paperwidth]{resources/new-years-card.jpg}
     % };
@@ -151,11 +151,14 @@
     % 宛名
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_rcpt_name_tl \l_tmpa_tl \l_tmpb_tl
-    \dim_set:Nn \l_tmpa_dim { \l__hgk_top_line_dim + \l__hgk_rcpt_name_indent_dim }
-    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpa_tl }
-    \dim_add:Nn \l_tmpa_dim { \l__hgk_rcpt_family_name_width_dim }
-    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l_tmpa_dim }{ \hgk_put_rcpt_name:\l_tmpb_tl }
-    \__hgk_put_txt:nnn { south }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_bottom_line_dim }{ \hgk_put_rcpt_name: 様 }
+    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_top_line_dim }{
+      \hbox_to_wd:nn { \l__hgk_bottom_line_dim - \l__hgk_top_line_dim }{
+        \skip_horizontal:N \l__hgk_rcpt_name_indent_dim
+        \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim { \hgk_put_rcpt_name:\l_tmpa_tl }
+        \hgk_put_rcpt_name:\l_tmpb_tl
+        \hfill\hgk_put_rcpt_name: 様
+      }
+    }
 
     % -- 差出人
     % 住所
@@ -166,7 +169,7 @@
     \__hgk_regex_split_two:nNNN
       { \s } \l__hgk_sender_name_tl \l_tmpa_tl \l_tmpb_tl
     \__hgk_put_txt:nnn { south }{ \l__hgk_sender_name_pos_dim, \l__hgk_bottom_line_dim }{
-      \hgk_put_sender_name: \l_tmpa_tl \hspace{1\zw} \l_tmpb_tl
+      \hgk_put_sender_name: \l_tmpa_tl \skip_horizontal:n { 1\zw } \l_tmpb_tl
     }
     % 郵便番号
     \__hgk_regex_split_two:nNNN
