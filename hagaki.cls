@@ -59,15 +59,15 @@
   sender / address_position     .dim_set:N = \l__hgk_sender_address_pos_dim,
   sender / name_position        .dim_set:N = \l__hgk_sender_name_pos_dim
 }
-\keys_set:nn { hgk / style }{
-  top_line    = 24mm,
-  recipient / address_position  = 10mm,
-  recipient / name_position     = 41mm,
-  recipient / name_indent       = 4mm,
-  recipient / family_name_width = 38mm,
-  sender / address_position     = 73mm,
-  sender / name_position        = 85mm
-}
+
+\dim_set:Nn \l__hgk_top_line_dim { 24mm }
+% \dim_set:Nn \l__hgk_bottom_line_dim { 130mm }
+\dim_set:Nn \l__hgk_rcpt_address_pos_dim { 10mm }
+\dim_set:Nn \l__hgk_rcpt_name_pos_dim { 41mm }
+\dim_set:Nn \l__hgk_rcpt_name_indent_dim { 4mm }
+\dim_set:Nn \l__hgk_rcpt_family_name_width_dim { 38mm }
+\dim_set:Nn \l__hgk_sender_address_pos_dim { 73mm }
+\dim_set:Nn \l__hgk_sender_name_pos_dim { 85mm }
 
 \newcommand\hagakisetup[1]{
   \keys_set:nn { hgk / style }{ #1 }
