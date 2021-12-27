@@ -20,8 +20,8 @@
 % ページスタイル
 \pagestyle{empty}
 % 紙サイズを指定
-\dim_set:Nn \paperheight { 148mm }
 \dim_set:Nn \paperwidth { 100mm }
+\dim_set:Nn \paperheight { 148mm }
 % 版面を紙一杯に広げる
 \dim_set:Nn \topmargin { 0pt }
 \dim_set:Nn \headheight { 0pt }
@@ -31,8 +31,8 @@
 \dim_set:Nn \hoffset { -1in }
 \dim_set:Nn \oddsidemargin { 0pt }
 \dim_set:Nn \evensidemargin { 0pt }
-\dim_set:Nn \textwidth { 100mm }
-\dim_set:Nn \textheight { 148mm }
+\dim_set_eq:NN \textwidth \paperwidth
+\dim_set_eq:NN \textheight \paperheight
 % 行設定
 \skip_set:Nn \parindent { 0pt }
 \skip_set:Nn \parskip { 0pt }
