@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.1.0}{}
 \RequirePackage{tikz}
-\RequirePackage{lua-visual-debug}
+% \RequirePackage{lua-visual-debug}
 
 % -- エラーの出力
 
@@ -41,16 +41,17 @@
 
 \keys_define:nn { hgk / sender }{
   postal_code .tl_set:N = \l__hgk_sender_postal_code_tl,
-  name        .tl_set:N = \l__hgk_sender_name_tl,
+  name        .code:n   = \seq_set_from_clist:Nn \l__hgk_sender_name_seq { #1 },
   address     .tl_set:N = \l__hgk_sender_address_tl
 }
 \newcommand\sender[1]{
   \keys_set:nn { hgk / sender }{ #1 }
 }
 
+\seq_new:N \l__hgk_rcpt_name_seq
 \keys_define:nn { hgk / recipient }{
   postal_code .tl_set:N = \l__hgk_rcpt_postal_code_tl,
-  name        .tl_set:N = \l__hgk_rcpt_name_tl,
+  name        .code:n   = \seq_set_from_clist:Nn \l__hgk_rcpt_name_seq { #1 },
   address     .tl_set:N = \l__hgk_rcpt_address_tl
 }
 \newcommand\recipient[1]{
@@ -103,7 +104,7 @@
 }
 
 % #1: 正規表現, #2: 文字列, #3: 前半を格納する変数, #4: 後半を格納する変数
-\cs_new:Npn \__hgk_regex_split_two:nNNN #1 #2 #3 #4 {
+\cs_new:Npn \__hgk_regex_split_two:nnnn #1 #2 #3 #4 {
   \exp_args:NnV \regex_split:nnN { #1 } #2 \l_tmpa_seq
   \seq_pop_left:NN \l_tmpa_seq #3
   \seq_pop_left:NN \l_tmpa_seq #4
@@ -116,6 +117,33 @@
   \tl_map_inline:Nn #4 {
     \node[] at (\l_tmpa_dim, #2) { #5 ##1 };
     \dim_add:Nn \l_tmpa_dim { #3 }
+  }
+}
+
+\dim_new:N \l__hgk_rcpt_name_width_dim
+\dim_set:Nn \l__hgk_rcpt_name_width_dim { \l__hgk_bottom_line_dim - \l__hgk_top_line_dim }
+\cs_new:Npn \__hgk_generate_rcpt:nn #1 #2 {
+  \hbox_to_wd:nn \l__hgk_rcpt_name_width_dim {
+    \skip_horizontal:N \l__hgk_rcpt_name_indent_dim
+    \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim { \hgk_put_rcpt_name: #1 }
+    \hgk_put_rcpt_name: #2
+    \hfill\hgk_put_rcpt_name: 様
+  }
+}
+\cs_new:Npn \__hgk_generate_sender:nn #1 #2 {
+  \hbox:n {
+    \hgk_put_sender_name: #1 \skip_horizontal:n { 1\zw } #2
+  }
+}
+
+\cs_new:Npn \__hgk_generate_names:nn #1 #2 {
+  \vbox:n {
+    \seq_map_inline:Nn #1 {
+      \tl_set:Nn \l_tmpa_tl { ##1 }
+      \__hgk_regex_split_two:nnnn
+        { \s } \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl
+      #2 \l_tmpa_tl \l_tmpb_tl
+    }
   }
 }
 
@@ -138,7 +166,7 @@
 
     % -- 宛名
     % 郵便番号
-    \__hgk_regex_split_two:nNNN
+    \__hgk_regex_split_two:nnnn
       { - } \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
     \__hgk_put_postal_code:nnnnn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
       \hgk_put_rcpt_postal_code:
@@ -149,15 +177,8 @@
       \hgk_put_rcpt_address:\l__hgk_rcpt_address_tl
     }
     % 宛名
-    \__hgk_regex_split_two:nNNN
-      { \s } \l__hgk_rcpt_name_tl \l_tmpa_tl \l_tmpb_tl
     \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_top_line_dim }{
-      \hbox_to_wd:nn { \l__hgk_bottom_line_dim - \l__hgk_top_line_dim }{
-        \skip_horizontal:N \l__hgk_rcpt_name_indent_dim
-        \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim { \hgk_put_rcpt_name:\l_tmpa_tl }
-        \hgk_put_rcpt_name:\l_tmpb_tl
-        \hfill\hgk_put_rcpt_name: 様
-      }
+      \__hgk_generate_names:nn \l__hgk_rcpt_name_seq \__hgk_generate_rcpt:nn
     }
 
     % -- 差出人
@@ -166,13 +187,11 @@
       \hgk_put_sender_address:\l__hgk_sender_address_tl
     }
     % 名前
-    \__hgk_regex_split_two:nNNN
-      { \s } \l__hgk_sender_name_tl \l_tmpa_tl \l_tmpb_tl
     \__hgk_put_txt:nnn { south }{ \l__hgk_sender_name_pos_dim, \l__hgk_bottom_line_dim }{
-      \hgk_put_sender_name: \l_tmpa_tl \skip_horizontal:n { 1\zw } \l_tmpb_tl
+      \__hgk_generate_names:nn \l__hgk_sender_name_seq \__hgk_generate_sender:nn
     }
     % 郵便番号
-    \__hgk_regex_split_two:nNNN
+    \__hgk_regex_split_two:nnnn
       { - } \l__hgk_sender_postal_code_tl \l_tmpb_tl \l_tmpa_tl
     \__hgk_put_postal_code:nnnnn { 67.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpa_tl
       \hgk_put_sender_postal_code:
