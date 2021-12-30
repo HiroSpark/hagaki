@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.1.0}{}
 \RequirePackage{tikz}
-\RequirePackage{lua-visual-debug}
+% \RequirePackage{lua-visual-debug}
 
 % -- エラーの出力
 
@@ -125,14 +125,14 @@
 \cs_new:Npn \__hgk_generate_rcpt:nn #1 #2 {
   \hbox_to_wd:nn \l__hgk_rcpt_name_width_dim {
     \skip_horizontal:N \l__hgk_rcpt_name_indent_dim
-    \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim { \hgk_put_rcpt_name: #1 \hfill }
-    \hgk_put_rcpt_name: #2
-    \hfill\hgk_put_rcpt_name: 様
+    \hgk_put_rcpt_name:
+    \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim { #1 }
+    \hbox:n { #2 } \hfill 様
   }
 }
 \cs_new:Npn \__hgk_generate_sender:nn #1 #2 {
   \hbox:n {
-    \hgk_put_sender_name: #1 \skip_horizontal:n { 1\zw } #2
+    \hgk_put_sender_name: \hbox:n { #1 } \skip_horizontal:n { 1\zw } \hbox:n { #2 }
   }
 }
 
