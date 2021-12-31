@@ -117,6 +117,7 @@
 % #5: 挿入する関数
 \cs_new:Npn \__hgk_put_postal_code:nnnnn #1 #2 #3 #4 #5 {
   \dim_set:Nn \l_tmpa_dim { #1 } % 現在の box の右端の x 座標
+  \tl_reverse:N #4
   \tl_map_inline:Nn #4 {
     \node[] at (\l_tmpa_dim, #2) { #5 ##1 };
     \dim_add:Nn \l_tmpa_dim { #3 }
