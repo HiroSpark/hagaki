@@ -1,7 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.1.0}{}
 \RequirePackage{tikz}
-% \RequirePackage{lua-visual-debug}
 
 % -- エラーの出力
 
@@ -89,6 +88,7 @@
 \dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 140.5mm }
 \dim_set:Nn \l__hgk_bottom_line_dim { 130mm }
 \bool_new:N \l__hgk_option_rensuji_bool
+\bool_new:N \l__hgk_option_debug_bool
 
 \DeclareOption{ nenga }{
   \dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 126mm }
@@ -97,10 +97,17 @@
 \DeclareOption{ rensuji }{
   \bool_set_true:N \l__hgk_option_rensuji_bool
 }
+\DeclareOption{ debug }{
+  \bool_set_true:N \l__hgk_option_debug_bool
+}
 \ProcessOptions
 
 \bool_if:NT \l__hgk_option_rensuji_bool {
   \RequirePackage{lltjext}
+}
+
+\bool_if:NT \l__hgk_option_debug_bool {
+  \RequirePackage{lua-visual-debug}
 }
 
 % -- 描画
@@ -173,12 +180,11 @@
   ]
     \useasboundingbox (0,0) rectangle (\paperwidth, \paperheight);
 
-    % -- 作業用
-    % \node[] (image) at (.5\paperwidth, .5\paperheight) {
-    %   \includegraphics[width=\paperwidth]{resources/new-years-card.jpg}
-    % };
-    % \draw[step=10mm, line~width=0.2mm,  blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
-    % \draw[step=1mm,  line~width=0.01mm, blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
+    % -- デバッグ
+    \bool_if:NT \l__hgk_option_debug_bool {
+      \draw[step=10mm, line~width=0.2mm,  blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
+      \draw[step=2mm,  line~width=0.01mm, blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
+    }
 
     % -- 宛名
     % 郵便番号
