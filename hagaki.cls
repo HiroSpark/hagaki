@@ -86,15 +86,22 @@
 % -- クラスオプション
 
 \dim_new:N \l__hgk_sender_postal_code_pos_dim
-
 \dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 140.5mm }
 \dim_set:Nn \l__hgk_bottom_line_dim { 130mm }
+\bool_new:N \l__hgk_option_rensuji_bool
 
 \DeclareOption{ nenga }{
   \dim_set:Nn \l__hgk_sender_postal_code_pos_dim { 126mm }
   \dim_set:Nn \l__hgk_bottom_line_dim { 114mm }
 }
+\DeclareOption{ rensuji }{
+  \bool_set_true:N \l__hgk_option_rensuji_bool
+}
 \ProcessOptions
+
+\bool_if:NT \l__hgk_option_rensuji_bool {
+  \RequirePackage{lltjext}
+}
 
 % -- 描画
 
@@ -152,6 +159,11 @@
 }
 
 \cs_new:Nn \__hgk_draw: {
+  \bool_if:NT \l__hgk_option_rensuji_bool {
+    \regex_set:Nn \l_tmpa_regex { (\d{1,4}) }
+    \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_rcpt_address_tl
+    \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_sender_address_tl
+  }
   \begin{tikzpicture}[
     % 座標系の変更
     xscale=-1,
