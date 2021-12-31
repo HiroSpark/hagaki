@@ -129,14 +129,14 @@
 \cs_new:Npn \__hgk_generate_rcpt:nn #1 #2 {
   \hbox_to_wd:nn \l__hgk_rcpt_name_width_dim {
     \skip_horizontal:N \l__hgk_rcpt_name_indent_dim
-    \hgk_put_rcpt_name:
+    \hgk_rcpt_name_style:
     \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim { #1 }
     \hbox:n { #2 } \hfill 様
   }
 }
 \cs_new:Npn \__hgk_generate_sender:nn #1 #2 {
   \hbox:n {
-    \hgk_put_sender_name: \hbox:n { #1 } \skip_horizontal:n { 1\zw } \hbox:n { #2 }
+    \hgk_sender_name_style: \hbox:n { #1 } \skip_horizontal:n { 1\zw } \hbox:n { #2 }
   }
 }
 
@@ -173,12 +173,12 @@
     \__hgk_regex_split_two:nnnn
       { - } \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
     \__hgk_put_postal_code:nnnnn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
-      \hgk_put_rcpt_postal_code:
+      \hgk_rcpt_postal_code_style:
     \__hgk_put_postal_code:nnnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
-      \hgk_put_rcpt_postal_code:
+      \hgk_rcpt_postal_code_style:
     % 住所
     \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_address_pos_dim, 24mm }{
-      \hgk_put_rcpt_address:\l__hgk_rcpt_address_tl
+      \hgk_rcpt_address_style:\l__hgk_rcpt_address_tl
     }
     % 宛名
     \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_top_line_dim }{
@@ -188,7 +188,7 @@
     % -- 差出人
     % 住所
     \__hgk_put_txt:nnn { south }{ \l__hgk_sender_address_pos_dim, \l__hgk_bottom_line_dim }{
-      \hgk_put_sender_address:\l__hgk_sender_address_tl
+      \hgk_sender_address_style:\l__hgk_sender_address_tl
     }
     % 名前
     \__hgk_put_txt:nnn { south }{ \l__hgk_sender_name_pos_dim, \l__hgk_bottom_line_dim }{
@@ -198,9 +198,9 @@
     \__hgk_regex_split_two:nnnn
       { - } \l__hgk_sender_postal_code_tl \l_tmpb_tl \l_tmpa_tl
     \__hgk_put_postal_code:nnnnn { 67.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpa_tl
-      \hgk_put_sender_postal_code:
+      \hgk_sender_postal_code_style:
     \__hgk_put_postal_code:nnnnn { 84.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpb_tl
-      \hgk_put_sender_postal_code:
+      \hgk_sender_postal_code_style:
   \end{tikzpicture}
 }
 
@@ -219,9 +219,9 @@
   \ltjsetparameter{kanjiskip=.2\zw}
 }
 
-\cs_set_eq:NN \hgk_put_rcpt_postal_code:    \__hgk_normal_txt_style:
-\cs_set_eq:NN \hgk_put_rcpt_address:        \__hgk_normal_txt_style:
-\cs_set_eq:NN \hgk_put_rcpt_name:           \__hgk_huge_txt_style:
-\cs_set_eq:NN \hgk_put_sender_postal_code:  \__hgk_normal_txt_style:
-\cs_set_eq:NN \hgk_put_sender_address:      \__hgk_normal_txt_style:
-\cs_set_eq:NN \hgk_put_sender_name:         \__hgk_large_txt_style:
+\cs_set_eq:NN \hgk_rcpt_postal_code_style:    \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_rcpt_address_style:        \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_rcpt_name_style:           \__hgk_huge_txt_style:
+\cs_set_eq:NN \hgk_sender_postal_code_style:  \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_sender_address_style:      \__hgk_normal_txt_style:
+\cs_set_eq:NN \hgk_sender_name_style:         \__hgk_large_txt_style:
