@@ -109,7 +109,7 @@
   \seq_pop_right:NN \l_tmpa_seq #4
   \seq_pop_right:NN \l_tmpa_seq #3
   \tl_if_eq:NNT #3 \q_no_value {
-    \tl_set:Nn #3 { 　 }
+    \tl_set:Nn #3 { }
   }
 }
 
@@ -135,7 +135,7 @@
   }
 }
 \cs_new:Npn \__hgk_generate_sender:nn #1 #2 {
-  \hbox:n {
+  \hbox_overlap_left:n {
     \hgk_sender_name_style: \hbox:n { #1 } \skip_horizontal:n { 1\zw } \hbox:n { #2 }
   }
 }
