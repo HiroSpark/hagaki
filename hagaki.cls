@@ -106,8 +106,11 @@
 % #1: 正規表現, #2: 文字列, #3: 前半を格納する変数, #4: 後半を格納する変数
 \cs_new:Npn \__hgk_regex_split_two:nnnn #1 #2 #3 #4 {
   \exp_args:NnV \regex_split:nnN { #1 } #2 \l_tmpa_seq
-  \seq_pop_left:NN \l_tmpa_seq #3
-  \seq_pop_left:NN \l_tmpa_seq #4
+  \seq_pop_right:NN \l_tmpa_seq #4
+  \seq_pop_right:NN \l_tmpa_seq #3
+  \tl_if_eq:NNT #3 \q_no_value {
+    \tl_set:Nn #3 { 　 }
+  }
 }
 
 % #1: 右端の文字の x 座標, #2: 右端の文字の y 座標, #3: 文字間隔, #4: 文字列,
