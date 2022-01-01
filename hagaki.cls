@@ -1,7 +1,7 @@
 % The package is distriibuted under the MIT License.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesExplClass{hagaki}{2021/12/18}{0.1.0}{}
+\ProvidesExplClass{hagaki}{2021/12/18}{0.2.0}{}
 \RequirePackage{tikz}
 
 % -- エラーの出力
