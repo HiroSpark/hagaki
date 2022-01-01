@@ -13,11 +13,11 @@
 
 % -- 基本的なレイアウト
 
-\LoadClass{ltjsarticle}
+\LoadClass{ ltjsarticle }
 % フォント
-\RequirePackage[haranoaji]{luatexja-preset}
+\RequirePackage[ haranoaji ]{ luatexja-preset }
 % ページスタイル
-\pagestyle{empty}
+\pagestyle{ empty }
 % 紙サイズを指定
 \dim_set:Nn \paperwidth { 100mm }
 \dim_set:Nn \paperheight { 148mm }
@@ -103,11 +103,11 @@
 \ProcessOptions
 
 \bool_if:NT \l__hgk_option_rensuji_bool {
-  \RequirePackage{lltjext}
+  \RequirePackage{ lltjext }
 }
 
 \bool_if:NT \l__hgk_option_debug_bool {
-  \RequirePackage{lua-visual-debug}
+  \RequirePackage{ lua-visual-debug }
 }
 
 % -- 描画
