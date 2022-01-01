@@ -36,8 +36,8 @@ $ l3build uninstall
 \section{使用法}
 
 予定にはありませんが、現在も開発中なため、将来のリリースで変更される可能性があります。
-\cmd{sender}は差出人の情報を、\cmd{recipient}は宛先の情報を指定します。
-\cmd{recipient}は宛先の情報の指定とともに、宛名面の作成も行います。
+\cs{sender}は差出人の情報を、\cs{recipient}は宛先の情報を指定します。
+\cs{recipient}は宛先の情報の指定とともに、宛名面の作成も行います。
 
 どちらも|keyval|リストで郵便番号・住所・名前を指定します。
 受け取る値の詳細は以下のようになっています。
@@ -51,7 +51,7 @@ $ l3build uninstall
   \code{address} & 住所 &
   組版の関係で、英数字は「\rotatebox[origin=c]{270}{1}」のようになってしまいます。
   それを避けたい場合は、数字を和文文字にするか、\pkg{lltjext} の
-  \cmd{rensuji{}} を使ってください。\\
+  \cs{rensuji{}} を使ってください。\\
   \bottomrule
 \end{tabularx}
 

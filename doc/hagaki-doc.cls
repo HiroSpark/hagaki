@@ -40,8 +40,8 @@
 \cs_set_eq:NN \pkg \code
 \cs_set_eq:NN \file \code
 
-\newcommand\cmd[1]{
-  \hbox{}\char`\\\texttt{#1}
+\newcommand\cs[1]{
+  \char`\\\texttt{#1}
 }
 
 \RequirePackage{listings}
