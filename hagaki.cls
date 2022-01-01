@@ -1,3 +1,5 @@
+% The package is distriibuted under the MIT License.
+
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.1.0}{}
 \RequirePackage{tikz}
