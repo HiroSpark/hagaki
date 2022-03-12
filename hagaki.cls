@@ -1,4 +1,4 @@
-% The package is distriibuted under the MIT License.
+% This package is distriibuted under the MIT License.
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.2.0}{}
