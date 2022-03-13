@@ -16,8 +16,6 @@
 % -- 基本的なレイアウト
 
 \LoadClass{ ltjsarticle }
-% フォント
-\RequirePackage[ haranoaji ]{ luatexja-preset }
 % ページスタイル
 \pagestyle{ empty }
 % 紙サイズを指定
