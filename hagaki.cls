@@ -2,7 +2,6 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesExplClass{hagaki}{2021/12/18}{0.2.0}{}
-\RequirePackage{tikz}
 
 % -- エラーの出力
 
@@ -35,6 +34,12 @@
 % 行設定
 \skip_set:Nn \parindent { 0pt }
 \skip_set:Nn \parskip { 0pt }
+
+% luatex にページサイズを伝える
+\AtBeginDocument{
+  \dim_set_eq:NN \pageheight \paperheight
+  \dim_set_eq:NN \pagewidth \paperwidth
+}
 
 % -- インターフェイス
 
@@ -112,9 +117,12 @@
 
 % -- 描画
 
-% #1: アンカーの位置, #2: 座標, #3: テキスト
+% #1,#2: 座標, #3: テキスト
 \cs_new:Npn \__hgk_put_txt:nnn #1 #2 #3 {
-  \node[anchor=#1] at (#2) { \tate\mbox{#3} };
+  \put(
+    \dim_to_decimal:n { #1 },
+    \dim_to_decimal:n { #2 }
+  ) { \mbox{\tate #3} }
 }
 
 % 正規表現による文字列の分割
@@ -135,7 +143,10 @@
   \dim_set:Nn \l_tmpa_dim { #1 } % 現在の box の右端の x 座標
   \tl_reverse:N #4
   \tl_map_inline:Nn #4 {
-    \node[] at (\l_tmpa_dim, #2) { #5 ##1 };
+    \put (
+      \dim_to_decimal:n { \l_tmpa_dim },
+      \dim_to_decimal:n { #2 }
+    ) { #5 ##1 }
     \dim_add:Nn \l_tmpa_dim { #3 }
   }
 }
@@ -177,20 +188,13 @@
     \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_rcpt_address_tl
     \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_sender_address_tl
   }
-  \begin{tikzpicture}[
-    % 座標系の変更
-    xscale=-1,
-    yscale=-1,
-    % その他の設定
-    inner~sep=0pt
-  ]
-    \useasboundingbox (0,0) rectangle (\paperwidth, \paperheight);
-
+  \dim_set:Nn \unitlength { -1pt }
+  \begin{ picture }(\paperwidth,\paperheight)(-\paperwidth,-\paperheight)
     % -- デバッグ
-    \bool_if:NT \l__hgk_option_debug_bool {
-      \draw[step=10mm, line~width=0.2mm,  blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
-      \draw[step=2mm,  line~width=0.01mm, blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
-    }
+    % \bool_if:NT \l__hgk_option_debug_bool {
+    %   \draw[step=10mm, line~width=0.2mm,  blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
+    %   \draw[step=2mm,  line~width=0.01mm, blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
+    % }
 
     % -- 宛名
     % 郵便番号
@@ -201,21 +205,27 @@
     \__hgk_put_postal_code:nnnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
       \hgk_rcpt_postal_code_style:
     % 住所
-    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_address_pos_dim, 24mm }{
-      \hgk_rcpt_address_style:\l__hgk_rcpt_address_tl
+    \__hgk_put_txt:nnn { \l__hgk_rcpt_address_pos_dim }{ 24mm }{
+      \hbox_overlap_right:n {
+        \hgk_rcpt_address_style:\l__hgk_rcpt_address_tl
+      }
     }
     % 宛名
-    \__hgk_put_txt:nnn { north }{ \l__hgk_rcpt_name_pos_dim, \l__hgk_top_line_dim }{
-      \__hgk_generate_names:nn \l__hgk_rcpt_name_seq \__hgk_generate_rcpt:nn
+    \__hgk_put_txt:nnn { \l__hgk_rcpt_name_pos_dim }{ \l__hgk_top_line_dim }{
+      \hbox_overlap_right:n {
+        \__hgk_generate_names:nn \l__hgk_rcpt_name_seq \__hgk_generate_rcpt:nn
+      }
     }
 
     % -- 差出人
     % 住所
-    \__hgk_put_txt:nnn { south }{ \l__hgk_sender_address_pos_dim, \l__hgk_bottom_line_dim }{
-      \hgk_sender_address_style:\l__hgk_sender_address_tl
+    \__hgk_put_txt:nnn { \l__hgk_sender_address_pos_dim }{ \l__hgk_bottom_line_dim }{
+      \hbox_overlap_left:n {
+        \hgk_sender_address_style:\l__hgk_sender_address_tl
+      }
     }
     % 名前
-    \__hgk_put_txt:nnn { south }{ \l__hgk_sender_name_pos_dim, \l__hgk_bottom_line_dim }{
+    \__hgk_put_txt:nnn { \l__hgk_sender_name_pos_dim }{ \l__hgk_bottom_line_dim }{
       \__hgk_generate_names:nn \l__hgk_sender_name_seq \__hgk_generate_sender:nn
     }
     % 郵便番号
@@ -225,7 +235,7 @@
       \hgk_sender_postal_code_style:
     \__hgk_put_postal_code:nnnnn { 84.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpb_tl
       \hgk_sender_postal_code_style:
-  \end{tikzpicture}
+  \end{ picture }
 }
 
 % -- デフォルトのスタイル
