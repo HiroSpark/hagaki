@@ -117,6 +117,7 @@
   \node[anchor=#1] at (#2) { \tate\mbox{#3} };
 }
 
+% 正規表現による文字列の分割
 % #1: 正規表現, #2: 文字列, #3: 前半を格納する変数, #4: 後半を格納する変数
 \cs_new:Npn \__hgk_regex_split_two:nnnn #1 #2 #3 #4 {
   \exp_args:NnV \regex_split:nnN { #1 } #2 \l_tmpa_seq
@@ -127,6 +128,7 @@
   }
 }
 
+% 郵便番号を配置
 % #1: 右端の文字の x 座標, #2: 右端の文字の y 座標, #3: 文字間隔, #4: 文字列,
 % #5: 挿入する関数
 \cs_new:Npn \__hgk_put_postal_code:nnnnn #1 #2 #3 #4 #5 {
@@ -138,6 +140,7 @@
   }
 }
 
+% 宛先の氏名を配置
 \dim_new:N \l__hgk_rcpt_name_width_dim
 \dim_set:Nn \l__hgk_rcpt_name_width_dim { \l__hgk_bottom_line_dim - \l__hgk_top_line_dim }
 \cs_new:Npn \__hgk_generate_rcpt:nn #1 #2 {
@@ -148,12 +151,15 @@
     \hbox:n { #2 } \hfill 様
   }
 }
+
+% 差出人の氏名を配置
 \cs_new:Npn \__hgk_generate_sender:nn #1 #2 {
   \hbox_overlap_left:n {
     \hgk_sender_name_style: \hbox:n { #1 } \skip_horizontal:n { 1\zw } \hbox:n { #2 }
   }
 }
 
+% 複数の氏名を配置
 \cs_new:Npn \__hgk_generate_names:nn #1 #2 {
   \vbox:n {
     \seq_map_inline:Nn #1 {
