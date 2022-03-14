@@ -1,0 +1,47 @@
+\documentclass{hagaki}
+\input{regression-test.tex}
+
+\begin{document}
+
+\START
+
+\ExplSyntaxOn
+
+\TEST{__hgk_regex_split_two:nnnn}{
+  \OMIT
+  \tl_set:Nn \l_tmpa_tl { 123-0014 }
+  \__hgk_regex_split_two:nnnn { - } \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl
+  \TIMO
+  \tl_show:N \l_tmpa_tl
+  \tl_show:N \l_tmpb_tl
+}
+
+%\TEST{__hgk_put_postal_code:nnnnn}{
+%  \__hgk_put_postal_code:nnnnn 
+%}
+
+\TEST{__hgk_generate_rcpt:nn}{
+  \OMIT
+  \hbox_set:Nn \l_tmpa_box { \__hgk_generate_rcpt:nn { 日本橋 }{ 太郎 } }
+  \TIMO
+  \box_show:N \l_tmpa_box
+}
+
+\TEST{__hgk_generate_sender:nn}{
+  \OMIT
+  \hbox_set:Nn \l_tmpa_box { \__hgk_generate_sender:nn { 日本橋 }{ 太郎 } }
+  \TIMO
+  \box_show:N \l_tmpa_box
+}
+
+\TEST{__hgk_generate_names:nn}{
+  \OMIT
+  \seq_set_from_clist:Nn \l_tmpa_seq { 日本 太郎, 花子 }
+  \vbox_set:Nn \l_tmpa_box { \__hgk_generate_names:nn \l_tmpa_seq \__hgk_generate_rcpt:nn }
+  \TIMO
+  \box_show:N \l_tmpa_box
+}
+
+\ExplSyntaxOff
+
+\end{document}
