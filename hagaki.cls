@@ -115,14 +115,19 @@
   \RequirePackage{ lua-visual-debug }
 }
 
-% -- 描画
+% -- 処理
 
 % #1,#2: 座標, #3: テキスト
-\cs_new:Npn \__hgk_put_txt:nnn #1 #2 #3 {
+\cs_new:Npn \__hgk_put:nnn #1 #2 #3 {
   \put(
     \dim_to_decimal:n { #1 },
     \dim_to_decimal:n { #2 }
-  ) { \mbox{\tate #3} }
+  ) { #3 }
+}
+
+% #1,#2: 座標, #3: テキスト
+\cs_new:Npn \__hgk_put_txt:nnn #1 #2 #3 {
+  \__hgk_put:nnn { #1 }{ #2 }{ \mbox{\tate #3} }
 }
 
 % 正規表現による文字列の分割
@@ -143,10 +148,7 @@
   \dim_set:Nn \l_tmpa_dim { #1 } % 現在の box の右端の x 座標
   \tl_reverse:N #4
   \tl_map_inline:Nn #4 {
-    \put (
-      \dim_to_decimal:n { \l_tmpa_dim },
-      \dim_to_decimal:n { #2 }
-    ) { #5 ##1 }
+    \__hgk_put:nnn { \l_tmpa_dim }{ #2 }{ #5 ##1 }
     \dim_add:Nn \l_tmpa_dim { #3 }
   }
 }
@@ -182,6 +184,22 @@
   }
 }
 
+% デバッグ用のグリッドを描画
+% #1: 横, #2: 縦, #3: 間隔, #4: 線幅
+\cs_new:Npn \__hgk_draw_grid:nnnn #1 #2 #3 #4 {
+  \multiput( 0, \dim_to_decimal:n {#2} )( \dim_to_decimal:n {#3}, 0 ){
+    \int_eval:n { \dim_ratio:nn { #1 }{ #3 } }
+  }{
+    \rule{#4}{#2}
+  }
+  \multiput( \dim_to_decimal:n {#1}, 0 )( 0, \dim_to_decimal:n {#3} ){
+    \int_eval:n { \dim_ratio:nn { #2 }{ #3 } }
+  }{
+    \rule{#1}{#4}
+  }
+}
+
+% 描画
 \cs_new:Nn \__hgk_draw: {
   \bool_if:NT \l__hgk_option_rensuji_bool {
     \regex_set:Nn \l_tmpa_regex { (\d{1,4}) }
@@ -191,11 +209,14 @@
   \dim_set:Nn \unitlength { -1pt }
   \begin{ picture }(\paperwidth,\paperheight)(-\paperwidth,-\paperheight)
     % -- デバッグ
-    % \bool_if:NT \l__hgk_option_debug_bool {
-    %   \draw[step=10mm, line~width=0.2mm,  blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
-    %   \draw[step=2mm,  line~width=0.01mm, blue] (0mm, 0mm) grid (\paperwidth, \paperheight);
-    % }
-
+    \bool_if:NT \l__hgk_option_debug_bool {
+      \color_group_begin:
+        \color_select:n { blue!25 }
+        \__hgk_draw_grid:nnnn { \paperwidth }{ \paperheight }{ 2mm }{ 0.01mm }
+        \color_select:n { blue }
+        \__hgk_draw_grid:nnnn { \paperwidth }{ \paperheight }{ 10mm }{ 0.2mm }
+      \color_group_end:
+    }
     % -- 宛名
     % 郵便番号
     \__hgk_regex_split_two:nnnn
