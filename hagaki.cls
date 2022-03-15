@@ -127,7 +127,10 @@
 
 % #1,#2: 座標, #3: テキスト
 \cs_new:Npn \__hgk_put_txt:nnn #1 #2 #3 {
-  \__hgk_put:nnn { #1 }{ #2 }{ \mbox{\tate #3} }
+  \hbox_set:Nn \l_tmpa_box { \tate #3 }
+  \__hgk_put:nnn {
+    \box_ht_plus_dp:N \l_tmpa_box / 2 + #1
+  }{ #2 }{ \box_use:N \l_tmpa_box }
 }
 
 % 正規表現による文字列の分割
@@ -148,7 +151,12 @@
   \dim_set:Nn \l_tmpa_dim { #1 } % 現在の box の右端の x 座標
   \tl_reverse:N #4
   \tl_map_inline:Nn #4 {
-    \__hgk_put:nnn { \l_tmpa_dim }{ #2 }{ #5 ##1 }
+    \hbox_set:Nn \l_tmpa_box { #5 ##1 }
+    \__hgk_put:nnn {
+      \box_ht_plus_dp:N \l_tmpa_box / 2 + \l_tmpa_dim
+    }{
+      \box_ht_plus_dp:N \l_tmpa_box / 2 + #2
+    }{ \box_use:N \l_tmpa_box }
     \dim_add:Nn \l_tmpa_dim { #3 }
   }
 }
