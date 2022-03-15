@@ -111,9 +111,9 @@
   \RequirePackage{ lltjext }
 }
 
-\bool_if:NT \l__hgk_option_debug_bool {
-  \RequirePackage{ lua-visual-debug }
-}
+% \bool_if:NT \l__hgk_option_debug_bool {
+%   \RequirePackage{ lua-visual-debug }
+% }
 
 % -- 処理
 
