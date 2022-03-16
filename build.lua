@@ -2,11 +2,23 @@ module = "hagaki"
 
 installfiles  = {"*.cls"}
 
-docfiledir    = "doc"
-typesetexe    = "lualatex"
-
 checkformat   = "latex"
 checkengines  = {"luatex"}
+
+-- ドキュメントの生成
+
+typesetexe    = "lualatex"
+typesetopts   = ""
+docfiledir    = "doc"
+typesetfiles  = {"hagaki.tex"}
+typesetdemofiles = {"example.tex"}
+typesetsourcefiles = {"hagaki-doc.cls"}
+
+function typeset(file, dir)
+  local dir = dir or "."
+  local cmd = typesetexe .. " " .. typesetopts
+  return runcmd(cmd .. " " .. file, dir, {"TEXINPUTS"})
+end
 
 -- バージョンの自動更新
 
