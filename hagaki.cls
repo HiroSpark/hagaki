@@ -1,7 +1,7 @@
 % This package is distriibuted under the MIT License.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesExplClass{hagaki}{2021/12/18}{0.2.0}{}
+\ProvidesExplClass{hagaki}{2022/03/16}{0.3.0}{}
 
 % -- エラーの出力
 
