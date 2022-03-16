@@ -44,5 +44,5 @@ end
 
 function tag_hook(tagname)
   os.execute("git commit -a -m 'chore: バージョンを v" .. tagname .. " に更新'")
-  os.execute("git v" .. tagname)
+  os.execute("git tag v" .. tagname)
 end
