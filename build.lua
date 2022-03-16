@@ -29,14 +29,14 @@ function update_tag(file, content, tagname, tagdate)
   if string.match(file, "%.tex$") then
     return string.gsub(
       content,
-      "\n\\date{.-（.-）}",
-      "\n\\date{v" .. tagname .. "（" .. tagdate .. "）}"
+      "\\date{.-（.-）}",
+      "\\date{v" .. tagname .. "（" .. tagdate .. "）}"
     )
   elseif string.match(file, "%.cls$") then
     return string.gsub(
       content,
-      "\n\\ProvidesExplClass{(.-)}{%d%d%d%d/%d%d/%d%d}{%d.%d.%d}",
-      "\n\\ProvidesExplClass{%1}{" .. tagdate .. "}{" .. tagname .. "}"
+      "\\ProvidesExplClass{(.-)}{.-}{.-}",
+      "\\ProvidesExplClass{%1}{" .. tagdate .. "}{" .. tagname .. "}"
     )
   end
   return content
