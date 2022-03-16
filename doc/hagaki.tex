@@ -16,7 +16,7 @@ Lua\TeX{}上で動作します。
 
 \begin{description}
   \item[Issues] \url{https://github.com/HiroSpark/hagaki/issues}
-  \item[Code] \url{https://github.com/HiroSpark/hagaki}
+  \item[ソースコード] \url{https://github.com/HiroSpark/hagaki}
 \end{description}
 
 \section{インストール}
@@ -93,7 +93,8 @@ $ l3build uninstall
   \midrule
   \code{nenga} & 年賀状用のレイアウトに変更します。\pkg{hagaki}のデフォルトレイアウトは通常ハガキです。\\
   \code{rensuji} & 住所の数字に対して、自動的に\cs{rensuji}を適用します。\pkg{lltjext}を読み込みます。\\
-  \code{debug} & デバッグ用に、グリッドや\TeX{}のボックスなどが表示されます。\pkg{lua-visual-debug}を読み込みます。\\
+  \code{debug} & デバッグ用に、グリッドが表示されます。ページの右上を基準に、太い線が10mmごと、
+    細い線が2mmごとに引かれます。\\
   \bottomrule
 \end{tabularx}
 
@@ -139,6 +140,14 @@ $ l3build uninstall
 \section{バージョン履歴}
 
 \begin{description}
+  \item[v0.3.0] 依存パッケージの削減と機能の改善を行いました。
+    \leavevmode
+    \begin{itemize}
+      \item デフォルトフォントのロードを廃止
+      \item \pkg{TikZ}及び\pkg{lua-visual-debug} への依存を廃止
+      \item 宛名面の描画を\code{tikzpicture}環境から\code{picture}環境に変更
+      \item \code{debug}オプション指定時に描画されるグリッドの改善
+    \end{itemize}
   \item[v0.2.0] カスタマイズ関連を中心に、機能の追加・強化といくつかの破壊的変更を行いました。
     \leavevmode
     \begin{itemize}
