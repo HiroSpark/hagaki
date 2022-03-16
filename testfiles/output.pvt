@@ -1,0 +1,17 @@
+\documentclass[nenga,rensuji]{hagaki}
+
+\sender{
+  postal_code = 103-0027,
+  name        = {日本 太郎, 花子},
+  address     = 東京都中央区日本橋1-3-11
+}
+
+\begin{document}
+
+\recipient{
+  postal_code = 542-0071,
+  name        = {日本  太郎, 花子},
+  address     = 大阪府大阪市中央区道頓堀1丁目
+}
+
+\end{document}
