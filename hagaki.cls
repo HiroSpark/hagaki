@@ -149,9 +149,10 @@
 
 % 正規表現による文字列の分割
 % #1: 正規表現, #2: 文字列, #3: 前半を格納する変数, #4: 後半を格納する変数
-\cs_new:Npn \__hgk_regex_split_two:nnnn #1 #2 #3 #4
+\cs_generate_variant:Nn \regex_split:NnN { NVN }
+\cs_new:Npn \__hgk_regex_split_two:NNnn #1 #2 #3 #4
   {
-    \exp_args:NnV \regex_split:nnN {#1} #2 \l_tmpa_seq
+    \regex_split:NVN #1 #2 \l_tmpa_seq
     \seq_pop_right:NN \l_tmpa_seq #4
     \seq_pop_right:NN \l_tmpa_seq #3
     \tl_if_eq:NNT #3 \q_no_value { \tl_set:Nn #3 { } }
@@ -200,13 +201,15 @@
   }
 
 % 複数の氏名を配置
+\regex_new:N \l__hgk_space_regex
+\regex_set:Nn \l__hgk_space_regex { \s }
 \cs_new:Npn \__hgk_map_names_function:nn #1 #2
   {
     \seq_map_inline:Nn #1
       {
         \tl_set:Nn \l_tmpa_tl { ##1 }
-        \__hgk_regex_split_two:nnnn
-          { \s } \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl
+        \__hgk_regex_split_two:NNnn
+          \l__hgk_space_regex \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl
         #2 \l_tmpa_tl \l_tmpb_tl
       }
   }
@@ -224,6 +227,9 @@
   }
 
 % 描画
+% 郵便番号の分割に使う正規表現
+\regex_new:N \l__hgk_hyphen_regex
+\regex_set:Nn \l__hgk_hyphen_regex { - }
 \cs_new:Nn \__hgk_draw:
   {
     \bool_if:NT \l__hgk_option_rensuji_bool
@@ -246,8 +252,8 @@
         }
       % -- 宛名
       % 郵便番号
-      \__hgk_regex_split_two:nnnn
-        { - } \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
+      \__hgk_regex_split_two:NNnn
+        \l__hgk_hyphen_regex \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
       \__hgk_put_postal_code:nnnnn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
         \hgk_rcpt_postal_code_style:
       \__hgk_put_postal_code:nnnnn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
@@ -288,8 +294,8 @@
             }
         }
       % 郵便番号
-      \__hgk_regex_split_two:nnnn
-        { - } \l__hgk_sender_postal_code_tl \l_tmpb_tl \l_tmpa_tl
+      \__hgk_regex_split_two:NNnn
+        \l__hgk_hyphen_regex \l__hgk_sender_postal_code_tl \l_tmpb_tl \l_tmpa_tl
       \__hgk_put_postal_code:nnnnn { 67.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpa_tl
         \hgk_sender_postal_code_style:
       \__hgk_put_postal_code:nnnnn { 84.5mm } \l__hgk_sender_postal_code_pos_dim { 4mm } \l_tmpb_tl
