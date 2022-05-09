@@ -25,21 +25,25 @@ end
 tagfiles = {"hagaki.cls", "doc/hagaki.tex"}
 
 function update_tag(file, content, tagname, tagdate)
-  tagdate = string.gsub(tagdate, "-", "/")
-  if string.match(file, "%.tex$") then
-    return string.gsub(
-      content,
-      "\\date{.-（.-）}",
-      "\\date{v" .. tagname .. "（" .. tagdate .. "）}"
-    )
-  elseif string.match(file, "%.cls$") then
-    return string.gsub(
-      content,
-      "\\ProvidesExplClass{(.-)}{.-}{.-}",
-      "\\ProvidesExplClass{%1}{" .. tagdate .. "}{" .. tagname .. "}"
-    )
+  if string.match(tagname, "^%d+%.%d+%.%d+$") ~= nil then
+    tagdate = string.gsub(tagdate, "-", "/")
+    if string.match(file, "%.tex$") then
+      return string.gsub(
+        content,
+        "\\date{.-（.-）}",
+        "\\date{v" .. tagname .. "（" .. tagdate .. "）}"
+      )
+    elseif string.match(file, "%.cls$") then
+      return string.gsub(
+        content,
+        "\\ProvidesExplClass{(.-)}{.-}{.-}",
+        "\\ProvidesExplClass{%1}{" .. tagdate .. "}{" .. tagname .. "}"
+      )
+    end
+    return content
+  else
+    error("タグの名前が誤っています。")
   end
-  return content
 end
 
 function tag_hook(tagname)
