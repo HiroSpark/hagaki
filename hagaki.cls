@@ -53,7 +53,7 @@
   }
 \newcommand \sender[1]
   {
-    \keys_set:nn { hgk / sender }{#1}
+    \keys_set:nn { hgk / sender } {#1}
   }
 
 \seq_new:N \l__hgk_rcpt_name_seq
@@ -65,7 +65,7 @@
   }
 \newcommand \recipient[1]
   {
-    \keys_set:nn { hgk / recipient }{#1}
+    \keys_set:nn { hgk / recipient } {#1}
     \__hgk_draw:
   }
 
@@ -92,7 +92,7 @@
 
 \newcommand \hagakisetup[1]
   {
-    \keys_set:nn { hgk / style }{#1}
+    \keys_set:nn { hgk / style } {#1}
   }
 
 % -- クラスオプション
@@ -153,6 +153,7 @@
 \cs_new:Npn \__hgk_regex_split_two:NNnn #1 #2 #3 #4
   {
     \regex_split:NVN #1 #2 \l_tmpa_seq
+    % 苗字が省略された場合に対応するため、右側の要素から取り出す
     \seq_pop_right:NN \l_tmpa_seq #4
     \seq_pop_right:NN \l_tmpa_seq #3
     \tl_if_eq:NNT #3 \q_no_value { \tl_set:Nn #3 { } }
@@ -187,6 +188,7 @@
         \skip_horizontal:N \l__hgk_rcpt_name_indent_dim
         \hgk_rcpt_name_style:
         \hbox_to_wd:nn \l__hgk_rcpt_family_name_width_dim {#1}
+        % 引数を hbox に入れない場合、字間が詰められてしまう
         \hbox:n {#2} \hfill 様
       }
   }
@@ -197,6 +199,7 @@
     \hbox_overlap_left:n
       {
         \hgk_sender_name_style:
+        % 引数を hbox に入れない場合、字間が詰められてしまう
         \hbox:n {#1} \skip_horizontal:n { 1\zw } \hbox:n {#2}
       }
   }
@@ -239,6 +242,8 @@
         \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_rcpt_address_tl
         \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_sender_address_tl
       }
+    % picture 環境の線幅と左下の隅の座標を負の値にすることで、
+    % 右上の隅を原点とし、左向きを x 軸正方向、下向きを y 軸正方向とした座標系になる
     \dim_set:Nn \unitlength { -1pt }
     \begin{ picture }(\paperwidth,\paperheight)(-\paperwidth,-\paperheight)
       % -- デバッグ
