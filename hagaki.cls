@@ -262,8 +262,7 @@
       % 住所
       \__hgk_put_txt:nnn \l__hgk_rcpt_address_pos_dim { 24mm }
         {
-          \hbox_overlap_right:n
-            { \hgk_rcpt_address_style: \l__hgk_rcpt_address_tl }
+          \hbox_overlap_right:n { \hgk_rcpt_address_style: \l__hgk_rcpt_address_tl }
         }
       % 宛名
       \__hgk_put_txt:nnn \l__hgk_rcpt_name_pos_dim \l__hgk_top_line_dim
@@ -281,10 +280,7 @@
       % 住所
       \__hgk_put_txt:nnn \l__hgk_sender_address_pos_dim \l__hgk_bottom_line_dim
         {
-          \hbox_overlap_left:n
-            {
-              \hgk_sender_address_style:\l__hgk_sender_address_tl
-            }
+          \hbox_overlap_left:n { \hgk_sender_address_style: \l__hgk_sender_address_tl }
         }
       % 名前
       \__hgk_put_txt:nnn \l__hgk_sender_name_pos_dim \l__hgk_bottom_line_dim
