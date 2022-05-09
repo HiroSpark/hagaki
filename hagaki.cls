@@ -200,17 +200,14 @@
   }
 
 % 複数の氏名を配置
-\cs_new:Npn \__hgk_generate_names:nn #1 #2
+\cs_new:Npn \__hgk_map_names_function:nn #1 #2
   {
-    \vbox:n
+    \seq_map_inline:Nn #1
       {
-        \seq_map_inline:Nn #1
-          {
-            \tl_set:Nn \l_tmpa_tl { ##1 }
-            \__hgk_regex_split_two:nnnn
-              { \s } \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl
-            #2 \l_tmpa_tl \l_tmpb_tl
-          }
+        \tl_set:Nn \l_tmpa_tl { ##1 }
+        \__hgk_regex_split_two:nnnn
+          { \s } \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl
+        #2 \l_tmpa_tl \l_tmpb_tl
       }
   }
 
@@ -266,7 +263,10 @@
         {
           \hbox_overlap_right:n
             {
-              \__hgk_generate_names:nn \l__hgk_rcpt_name_seq \__hgk_generate_rcpt:nn
+              \vbox:n
+                {
+                  \__hgk_map_names_function:nn \l__hgk_rcpt_name_seq \__hgk_generate_rcpt:nn
+                }
             }
         }
 
@@ -282,7 +282,10 @@
       % 名前
       \__hgk_put_txt:nnn \l__hgk_sender_name_pos_dim \l__hgk_bottom_line_dim
         {
-          \__hgk_generate_names:nn \l__hgk_sender_name_seq \__hgk_generate_sender:nn
+          \vbox:n
+            {
+              \__hgk_map_names_function:nn \l__hgk_sender_name_seq \__hgk_generate_sender:nn
+            }
         }
       % 郵便番号
       \__hgk_regex_split_two:nnnn
