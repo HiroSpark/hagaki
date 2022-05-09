@@ -5,13 +5,13 @@
 
 % -- エラーの出力
 
-\sys_if_engine_luatex:F
+\msg_new:nnn { hagaki } { missing-engine-format }
   {
-    \ClassError{ hagaki }{
-      You~are~processing~this~document~with~\c_sys_engine_format_str.~
-      This~package~runs~only~on~lualatex
-    }{}
+    You~are~processing~this~document~with~\c_sys_engine_format_str.~
+    hagaki~only~works~with~lualatex.
   }
+
+\sys_if_engine_luatex:F { \msg_error:nn { hagaki } { missing-engine-format } }
 
 % -- 基本的なレイアウト
 
