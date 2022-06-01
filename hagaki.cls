@@ -242,6 +242,7 @@
         \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_rcpt_address_tl
         \regex_replace_all:NnN \l_tmpa_regex { \c{rensuji}\{\1\} } \l__hgk_sender_address_tl
       }
+    \clearpage
     % picture 環境の線幅と左下の隅の座標を負の値にすることで、
     % 右上の隅を原点とし、左向きを x 軸正方向、下向きを y 軸正方向とした座標系になる
     \dim_set:Nn \unitlength { -1pt }
