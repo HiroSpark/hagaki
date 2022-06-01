@@ -19,22 +19,22 @@
 % ページスタイル
 \pagestyle{ empty }
 % 紙サイズを指定
-\dim_set:Nn \paperwidth     { 100mm }
-\dim_set:Nn \paperheight    { 148mm }
+\dim_set:Nn     \paperwidth     { 100mm }
+\dim_set:Nn     \paperheight    { 148mm }
 % 版面を紙一杯に広げる
-\dim_set:Nn \topmargin      { 0pt }
-\dim_set:Nn \headheight     { 0pt }
-\dim_set:Nn \headsep        { 0pt }
-\dim_set:Nn \footskip       { 0pt }
-\dim_set:Nn \voffset        { -1in }
-\dim_set:Nn \hoffset        { -1in }
-\dim_set:Nn \oddsidemargin  { 0pt }
-\dim_set:Nn \evensidemargin { 0pt }
-\dim_set_eq:NN \textwidth \paperwidth
-\dim_set_eq:NN \textheight \paperheight
+\dim_set:Nn     \topmargin      { 0pt }
+\dim_set:Nn     \headheight     { 0pt }
+\dim_set:Nn     \headsep        { 0pt }
+\dim_set:Nn     \footskip       { 0pt }
+\dim_set:Nn     \voffset        { -1in }
+\dim_set:Nn     \hoffset        { -1in }
+\dim_set:Nn     \oddsidemargin  { 0pt }
+\dim_set:Nn     \evensidemargin { 0pt }
+\dim_set_eq:NN  \textwidth      \paperwidth
+\dim_set_eq:NN  \textheight     \paperheight
 % 行設定
-\skip_set:Nn \parindent { 0pt }
-\skip_set:Nn \parskip { 0pt }
+\skip_set:Nn    \parindent     { 0pt }
+\skip_set:Nn    \parskip       { 0pt }
 
 % luatex にページサイズを伝える
 \AtBeginDocument
@@ -223,11 +223,11 @@
 \cs_new:Npn \__hgk_draw_grid:nnnn #1 #2 #3 #4
   {
     \multiput( 0, \dim_to_decimal:n {#2} )( \dim_to_decimal:n {#3}, 0 )
-      { \int_eval:n { \dim_ratio:nn {#1}{#3} } }
-      { \rule{#4}{#2} }
+      { \int_eval:n { \dim_ratio:nn {#1} {#3} } }
+      { \rule {#4} {#2} }
     \multiput( \dim_to_decimal:n {#1}, 0 )( 0, \dim_to_decimal:n {#3} )
-      { \int_eval:n { \dim_ratio:nn {#2}{#3} } }
-      { \rule{#1}{#4} }
+      { \int_eval:n { \dim_ratio:nn {#2} {#3} } }
+      { \rule {#1} {#4} }
   }
 
 % 描画
@@ -245,24 +245,24 @@
     % picture 環境の線幅と左下の隅の座標を負の値にすることで、
     % 右上の隅を原点とし、左向きを x 軸正方向、下向きを y 軸正方向とした座標系になる
     \dim_set:Nn \unitlength { -1pt }
-    \begin{ picture }(\paperwidth,\paperheight)(-\paperwidth,-\paperheight)
+    \begin{ picture } ( \paperwidth, \paperheight ) ( -\paperwidth, -\paperheight )
       % -- デバッグ
       \bool_if:NT \l__hgk_option_debug_bool
         {
           \color_group_begin:
             \color_select:n { blue!25 }
-            \__hgk_draw_grid:nnnn \paperwidth \paperheight { 2mm }{ 0.01mm }
+            \__hgk_draw_grid:nnnn \paperwidth \paperheight { 2mm } { 0.01mm }
             \color_select:n { blue }
-            \__hgk_draw_grid:nnnn \paperwidth \paperheight { 10mm }{ 0.2mm }
+            \__hgk_draw_grid:nnnn \paperwidth \paperheight { 10mm } { 0.2mm }
           \color_group_end:
         }
       % -- 宛名
       % 郵便番号
       \__hgk_regex_split_two:NNnn
         \l__hgk_hyphen_regex \l__hgk_rcpt_postal_code_tl \l_tmpb_tl \l_tmpa_tl
-      \__hgk_put_postal_code:nnnNn { 10.85mm }{ 16mm }{ 6.8mm } \l_tmpa_tl
+      \__hgk_put_postal_code:nnnNn { 10.85mm } { 16mm } { 6.8mm } \l_tmpa_tl
         \hgk_rcpt_postal_code_style:
-      \__hgk_put_postal_code:nnnNn { 38.85mm }{ 16mm }{ 7mm } \l_tmpb_tl
+      \__hgk_put_postal_code:nnnNn { 38.85mm } { 16mm } { 7mm } \l_tmpb_tl
         \hgk_rcpt_postal_code_style:
       % 住所
       \__hgk_put_txt:nnn \l__hgk_rcpt_address_pos_dim { 24mm }
