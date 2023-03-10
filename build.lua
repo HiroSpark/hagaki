@@ -1,6 +1,7 @@
 module = "hagaki"
 
 installfiles  = {"*.cls"}
+sourcefiles   = {"*.cls"}
 
 checkformat   = "latex"
 checkengines  = {"luatex"}
