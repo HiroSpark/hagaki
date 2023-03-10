@@ -46,7 +46,7 @@ function update_tag(file, content, tagtype, tagdate)
   else
     error("tag のタイプは、major/minor/patch のいずれかにしてください")
   end
-  local tagname = major .. "." .. minor .. "." .. patch
+  tagname = major .. "." .. minor .. "." .. patch
   -- タグを更新
   tagdate = string.gsub(tagdate, "-", "/")
   if string.match(file, "%.tex$") then
@@ -65,7 +65,7 @@ function update_tag(file, content, tagtype, tagdate)
   return content
 end
 
-function tag_hook(tagname)
+function tag_hook()
   os.execute("git commit -a -m 'chore: バージョンを v" .. tagname .. " に更新'")
   os.execute("git tag v" .. tagname)
 end
